@@ -1,26 +1,31 @@
 // server.js
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
-
 const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users'); // These routes are protected by auth middleware
+const userRoutes = require('./routes/users');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI, {
+const PORT = process.env.PORT || 5001;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/user_api';
+
+mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error(err));
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error(err));
 
 app.use('/api/auth', authRoutes);   // Public routes
-app.use('/api/users', userRoutes);  // Protected routes
+app.use('/api/users', userRoutes);    // Protected routes
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+}
+
+module.exports = app;

@@ -4,9 +4,7 @@ const User = require('../models/User');
 exports.createUser = async (req, res, next) => {
   try {
     const { name, email, role } = req.body;
-
-    // This endpoint creates a user without a provided password.
-    // In a production scenario, you might want to generate a random password or enforce a workflow.
+    // In a real app, you might want to handle password generation
     const user = new User({ name, email, password: 'defaultpassword', role });
     await user.save();
     res.status(201).json(user);
@@ -17,7 +15,6 @@ exports.createUser = async (req, res, next) => {
 
 exports.getAllUsers = async (req, res, next) => {
   try {
-    // Exclude the password field from the result
     const users = await User.find().select('-password');
     res.json(users);
   } catch (err) {
@@ -52,6 +49,10 @@ exports.updateUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
   try {
+    // Role-based access control: Only admins can delete users
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only can delete users.' });
+    }
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.json({ message: 'User deleted successfully' });
