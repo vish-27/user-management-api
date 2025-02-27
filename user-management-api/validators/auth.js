@@ -1,4 +1,3 @@
-// validators/auth.js
 const Joi = require('joi');
 
 const signupSchema = Joi.object({

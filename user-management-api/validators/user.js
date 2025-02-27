@@ -1,4 +1,3 @@
-// validators/user.js
 const Joi = require('joi');
 
 const createUserSchema = Joi.object({

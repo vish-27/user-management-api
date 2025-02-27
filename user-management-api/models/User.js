@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
@@ -9,7 +8,7 @@ const UserSchema = new mongoose.Schema({
   role: { type: String, default: 'user' }
 }, { timestamps: true });
 
-// Hash password before saving if modified
+
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   try {
@@ -21,7 +20,7 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
-// Compare candidate password with hashed password
+
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

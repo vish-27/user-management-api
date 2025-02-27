@@ -1,7 +1,6 @@
-// routes/users.js
 const express = require('express');
 const router = express.Router();
-const authMiddleware = require('../middleware/auth'); // Ensure no () here
+const authMiddleware = require('../middleware/auth');
 const { validateBody } = require('../middleware/validate');
 const { createUserSchema, updateUserSchema } = require('../validators/user');
 const {
@@ -12,7 +11,6 @@ const {
   deleteUser
 } = require('../controllers/userController');
 
-// Apply JWT middleware to all routes in this file
 router.use(authMiddleware);
 
 router.post('/', validateBody(createUserSchema), createUser);

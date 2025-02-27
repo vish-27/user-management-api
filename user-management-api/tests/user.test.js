@@ -1,4 +1,3 @@
-// tests/user.test.js
 const request = require('supertest');
 const app = require('../server');
 const mongoose = require('mongoose');
@@ -9,7 +8,6 @@ describe('User Endpoints', () => {
   let adminToken, userToken, testUserId;
   
   beforeAll(async () => {
-    // Create admin user
     const adminUser = new User({
       name: 'Admin User',
       email: 'admin@example.com',
@@ -18,7 +16,6 @@ describe('User Endpoints', () => {
     });
     await adminUser.save();
     
-    // Create regular user
     const regularUser = new User({
       name: 'Regular User',
       email: 'user@example.com',
@@ -27,7 +24,6 @@ describe('User Endpoints', () => {
     });
     await regularUser.save();
 
-    // Generate tokens for both users
     adminToken = jwt.sign(
       { id: adminUser._id, email: adminUser.email, role: adminUser.role },
       process.env.JWT_SECRET,
@@ -39,7 +35,6 @@ describe('User Endpoints', () => {
       { expiresIn: '1h' }
     );
     
-    // Create a user to test deletion
     const testUser = new User({
       name: 'Test Delete User',
       email: 'delete@example.com',
@@ -51,7 +46,6 @@ describe('User Endpoints', () => {
   });
 
   afterAll(async () => {
-    // Cleanup test users and close connection
     await User.deleteMany({});
     await mongoose.connection.close();
   });
@@ -65,7 +59,6 @@ describe('User Endpoints', () => {
   });
 
   it('should forbid non-admin user from deleting a user', async () => {
-    // Create another user to test deletion
     const anotherUser = new User({
       name: 'Another Test User',
       email: 'anothertest@example.com',

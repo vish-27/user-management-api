@@ -1,10 +1,8 @@
-// controllers/userController.js
 const User = require('../models/User');
 
 exports.createUser = async (req, res, next) => {
   try {
     const { name, email, role } = req.body;
-    // In a real app, you might want to handle password generation
     const user = new User({ name, email, password: 'defaultpassword', role });
     await user.save();
     res.status(201).json(user);
@@ -49,7 +47,6 @@ exports.updateUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
   try {
-    // Role-based access control: Only admins can delete users
     if (req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Access denied. Admins only can delete users.' });
     }

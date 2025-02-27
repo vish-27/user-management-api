@@ -1,4 +1,3 @@
-// server.js
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -19,8 +18,8 @@ mongoose.connect(MONGO_URI, {
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
 
-app.use('/api/auth', authRoutes);   // Public routes
-app.use('/api/users', userRoutes);    // Protected routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(errorHandler);
 
